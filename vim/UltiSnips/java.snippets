@@ -1,0 +1,49 @@
+# Many of the snippets here use a global option called
+# "g:ultisnips_java_brace_style" which, if set to "nl" will put a newline
+# before '{' braces.
+# Setting "g:ultisnips_java_junit" will change how the test method snippet
+# looks, it is defaulted to junit4, setting this option to 3 will remove the
+# @Test annotation from the method
+
+global !p
+def nl(snip):
+	if snip.opt("g:ultisnips_java_brace_style", "") == "nl":
+		snip += ""
+	else:
+		snip.rv += " "
+endglobal
+
+snippet clm "class and main" b
+public class `!p
+snip.rv = snip.basename or "untitled"` {
+
+	public static void main(String... args)`!p nl(snip)`{
+		$0
+	}
+}
+endsnippet
+
+
+snippet j.l "java_lang" i
+java.lang.
+endsnippet
+
+snippet syb "synchronized (block)"
+synchronized(${1:obj})`!p nl(snip)`{
+	$0
+}
+endsnippet
+
+snippet ep "err.print" b
+System.err.print($1);$0
+endsnippet
+
+snippet epl "println"  b
+System.err.println($1);$0
+endsnippet
+
+snippet == "equals" b
+.equals($0)
+endsnippet
+
+# vim:ft=snippets:

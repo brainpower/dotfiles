@@ -1,0 +1,72 @@
+extends c
+
+###########################################################################
+#                            TextMate Snippets                            #
+###########################################################################
+snippet beginend "$1.begin(), $1.end() (beginend)"
+${1:v}${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}begin(), $1${1/^.*?(-)?(>)?$/(?2::(?1:>:.))/}end()
+endsnippet
+
+snippet cl "class .. (class)"
+class ${1:`!p snip.rv = snip.basename or "name"`};
+typedef std::shared_ptr<${1}> ${1}Ptr;
+
+class ${1} {
+public:
+	${1/(\w+).*/$1/}(${2:arguments});
+	virtual ~${1/(\w+).*/$1/}();
+
+private:
+	${0:/* data */}
+};
+endsnippet
+
+snippet ns "namespace .. (namespace)"
+namespace${1/.+/ /m}${1:`!p snip.rv = snip.basename or "name"`}
+{
+	${VISUAL}${0:${VISUAL/(.*)/(?1::\/* code *\/)/}}
+}${1/.+/ \/* /m}$1${1/.+/ *\/ /m}
+endsnippet
+
+snippet guard "Include header once only guard"
+#ifndef ${1:`!p
+if not snip.c:
+	snip.rv = re.sub(r'[^A-Za-z0-9]+','_', snip.fn).upper()
+else:
+	snip.rv = snip.c`}
+#define $1
+
+${0}
+
+#endif /* $1 */
+
+endsnippet
+
+snippet ptr "typedef a shared_ptr<xxx> to xxxPtr"
+class ${1:`!p snip.rv = snip.basename or "name"`};
+typedef std::shared_ptr<${1}> ${1}Ptr;
+
+$0
+endsnippet
+
+snippet uns "using namespace std"
+using namespace std;
+endsnippet
+
+snippet cssr "const std::string ref"
+const std::string &$0
+endsnippet
+
+snippet csr "const string ref"
+const string &$0
+endsnippet
+
+snippet endl "expand endl to std::endl"
+std::endl
+endsnippet
+
+snippet cout "expand cout to std::cout"
+std::cout
+endsnippet
+
+# vim:ft=snippets:

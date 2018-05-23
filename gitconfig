@@ -1,0 +1,24 @@
+# Flie: ~/.gitconfig
+[user]
+	email = YOU@example.com
+	name = YOU
+	signingkey = 8899AABBCCDDEEFF
+[alias]
+	co = checkout
+	cm = commit
+	s = status
+	wu = log --stat origin..@{0}
+	wup = log -p origin..@{0}
+[color]
+	branch = auto
+	diff = auto
+	status = auto
+	ui = true
+[push]
+	default = simple
+#[branch]
+#	autosetuprebase = always
+#[branch "master"]
+#	rebase = true
+[commit]
+	gpgsign = true

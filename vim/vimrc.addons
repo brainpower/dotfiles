@@ -1,0 +1,178 @@
+" Filename:      vimrc.addons
+" Purpose:       Configuration file for vim,
+"                contains the code to load all vim scripts aka. vim addons
+" Authors:       (c) 2013-2015 brainpower <brainpower at mailbox dot org>
+" License:       This file is licensed under the GPL v2.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" specify which completion addon shall be used
+" dont try to use both, or vim may eat your shirt and drink all your beer
+if !exists("g:brainpower_use_ycm")
+  let g:brainpower_use_ycm = 1
+endif
+if !exists("g:brainpower_use_neo")
+  let g:brainpower_use_neo = 0
+endif
+
+
+filetype off
+""""""""""""
+"  Vundle  "
+""""""""""""
+if !exists("g:brainpower_vundle_setup_ran")
+	let g:brainpower_vundle_setup_ran = 0
+endif
+fun! SetupVundle()
+  let c = get(g:, 'vundle', {})
+  let g:vundle = c
+  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/bundle'
+  " most used options you may want to use:
+  " let c.log_to_buf = 1
+  " let c.auto_install = 0
+  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/Vundle.vim'
+  if !isdirectory(c.plugin_root_dir.'/Vundle.vim/autoload')
+    execute '!git clone --depth=1 git://github.com/gmarik/Vundle.vim.git '
+        \       shellescape(c.plugin_root_dir.'/Vundle.vim', 1)
+    let g:brainpower_vundle_setup_ran = 1
+  endif
+endfun
+call SetupVundle()
+call vundle#begin()
+
+" vundle iself {{{
+Plugin 'gmarik/Vundle.vim'
+" }}}
+
+" general {{{
+Plugin 'travisjeffery/vim-auto-mkdir'
+"Plugin 'bogado/file-line'                    " goto line number when appended to filename with colon
+Plugin 'scrooloose/nerdtree'                 " nerdtree
+Plugin 'raimondi/delimitmate'                " delimitmate
+"Plugin 'jiangmiao/auto-pairs'           " TODO!
+Plugin 'kien/ctrlp.vim'                      " ctrlp
+Plugin 'tacahiroy/ctrlp-funky'               " ctrlp-funky
+Plugin 'kristijanhusak/vim-multiple-cursors' " multiple cursers
+Plugin 'vim-scripts/sessionman.vim'          " sessionman
+Plugin 'bling/vim-airline'                   " airline
+Plugin 'Lokaltog/vim-easymotion'             " easymotion
+Plugin 'mbbill/undotree'                     " undotree
+Plugin 'nathanaelkane/vim-indent-guides'     " indent-guides
+Plugin 'mhinz/vim-signify'                   " signify
+Plugin 'osyo-manga/vim-over'                 " substitute preview
+Plugin 'mileszs/ack.vim'                     " make Ack available
+Plugin 'tpope/vim-projectionist'             " file position in tree matching
+Plugin 'tpope/vim-fugitive'                  " a Git wrapper so awesome, it should be illegal
+Plugin 'tpope/vim-abolish'                   " easily search for, substitute, and abbreviate multiple variants of a word
+Plugin 'tpope/vim-surround'                  " quoting/parenthesizing made simple
+Plugin 'tpope/vim-repeat'                    " repeat
+Plugin 'tpope/vim-dispatch'                  " asynchronous build and test dispatcher
+Plugin 'tpope/vim-eunuch'
+Plugin 'vim-scripts/Modeliner'               " add current settings as modeline
+" }}}
+
+" colorschemes {{{
+Plugin 'altercation/vim-colors-solarized'
+" }}}
+
+" syntax & comment {{{
+Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-commentary'
+Plugin 'godlygeek/tabular'
+Plugin 'majutsushi/tagbar'
+" }}}
+
+" complete {{{
+if g:brainpower_use_ycm
+  Plugin 'Valloric/YouCompleteMe'
+  Plugin 'SirVer/ultisnips'
+  Plugin 'honza/vim-snippets'
+endif
+if g:brainpower_use_neo
+  Plugin 'Shougo/neocomplete.vim'
+  Plugin 'Shougo/neosnippet'
+  Plugin 'Shougo/neosnippet-snippets'
+  Plugin 'honza/vim-snippets'
+endif
+" }}}
+
+" c + cpp {{{
+Plugin 'vim-scripts/a.vim'
+" }}}
+
+" databases {{{
+Plugin 'vim-scripts/dbext.vim'
+" }}}
+
+" php {{{
+Plugin 'spf13/PIV'
+Plugin 'arnaud-lb/vim-php-namespace'
+Plugin 'mitsuhiko/vim-jinja' " twig syntax highlighting and more
+Plugin 'evidens/vim-twig'
+" }}}
+
+" java {{{
+Plugin 'vim-scripts/JavaDecompiler.vim'
+" }}}
+
+" python {{{
+Plugin 'davidhalter/jedi-vim' " included in YCM, but vanilla is better
+"}}}
+
+" javascript {{{
+Plugin 'elzr/vim-json'
+Plugin 'groenewege/vim-less'
+Plugin 'pangloss/vim-javascript'
+"}}}
+
+" html & css {{{
+Plugin 'alvan/vim-closetag'
+Plugin 'hail2u/vim-css3-syntax'
+Plugin 'gorodinskiy/vim-coloresque'
+"}}}
+
+" ruby {{{
+Plugin 'tpope/vim-rails'                    " rails
+Plugin 'tpope/vim-rake'                     " it's like rails.vim without the rails
+Plugin 'tpope/vim-bundler'                  " Lightweight support for Ruby's Bundler,
+"Plugin 'tpope/vim-endwise'                  " needs 'gem install gem-ctags && gem ctags' for ctags support
+" }}}
+
+" misc {{{
+Plugin 'wting/rust.vim'
+Plugin 'spf13/vim-preview'
+"}}}
+
+" own misc {{{
+Plugin 'vim-scripts/argtextobj.vim'
+Plugin 'vim-scripts/ShowTrailingWhitespace'
+Plugin 'vim-scripts/DeleteTrailingWhitespace'
+Plugin 'mrtazz/DoxygenToolkit.vim'
+Plugin 'vim-scripts/DirDiff.vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
+"Plugin 'editorconfig/editorconfig-vim'
+Plugin 'techlivezheng/vim-plugin-minibufexpl'
+Plugin 'Smart-Home-Key'
+Plugin 'TailMinusF'
+Plugin 'guns/xterm-color-table.vim'
+"}}}
+
+" snippets {{{
+"Plugin 'dawikur/algorithm-mnemonics.vim'
+"}}}
+
+"""""""""""""""
+" deactivated "
+"""""""""""""""
+" Notes:
+" - look at FuzzyFinder, refactor, Command-T
+
+" All of your Plugins must be added before the following line
+call vundle#end()
+
+if g:brainpower_vundle_setup_ran
+	PluginInstall
+endif
+
+" vim: foldmethod=marker foldlevel=0:

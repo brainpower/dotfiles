@@ -1,0 +1,785 @@
+" Filename:      vimrc
+" Purpose:       Configuration file for vim,
+"                includes the grml vimrc settings
+" Authors:       (c) 2013-2015 brainpower <brainpower at mailbox dot org>
+" License:       This file is licensed under the GPL v2.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+""""""""""""""""""""
+"  general things  "
+""""""""""""""""""""
+
+" always run in nocompatible mode!
+set nocompatible
+
+" enable syntax highlighting if avaiable
+if has("syntax")
+	syntax on
+endif
+
+colorscheme bp
+
+" source grml configuration file
+"if filereadable(expand("$HOME/.vim/vimrc.grml"))
+"  source $HOME/.vim/vimrc.grml
+"endif
+
+""""""""""""""""""""
+" general let's    "
+""""""""""""""""""""
+" this makes sure that shell scripts are highlighted
+" as bash scripts and not sh scripts
+let g:is_posix = 1
+"eclim disables syntastic, so disable it for c-like languages
+"after all we've got YCM and syntastic for c-like languages
+let g:EclimCValidate = 0
+" change the mapleader from \ to ,
+let mapleader=","
+
+
+""""""""""""""""""""
+"  addon settings  "
+""""""""""""""""""""
+"{{{
+
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+"modeliner {{{
+let g:Modeliner_format = 'et ft= sts= sw= ts='
+"}}}
+
+"signify {{{
+let g:signify_vcs_list = ['git']
+"fun
+"endf
+
+"}}}
+
+"nerdtree {{{
+let g:NERDShutUp=1
+
+" nerd tree toggle
+map <C-e> :NERDTreeToggle<CR>
+
+let NERDTreeShowBookmarks = 1
+let NERDTreeIgnore        = [
+	\  '\.py[cd]$', '\.o$',
+	\  '\~$', '\.swo$', '\.swp$',
+	\  '^\.git$', '^\.hg$', '^\.svn$', '^\.bzr$',
+	\  '\.aux$', '\.alg$', '\.acr$', '\.bbl$', '\.blg$', '\.toc$', '\.snm$', '\.out$', '\.nav$', '\.acn$',
+  \  '\.glg$', '\.glo$', '\.gls$', '\.glsdefs$', '\.ist$', '\.lof$', '\.lot$'
+	\]
+let NERDTreeChDirMode     = 0
+let NERDTreeQuitOnOpen    = 0
+let NERDTreeMouseMode     = 2
+let NERDTreeShowHidden    = 1
+"}}}
+
+" delimit mate {{{
+let delimitMate_expand_cr = 1
+let delimitMate_expand_space = 1
+" }}}
+
+" json {{{
+let g:vim_json_syntax_conceal = 0
+"}}}
+
+" DeleteTrailingWhitespace {{{
+let g:DeleteTrailingWhitespace_Action = 'delete'
+autocmd FileType diff let b:DeleteTrailingWhitespace_Action = 'ask'
+"}}}
+
+" ack.vim {{{
+if executable('ag')
+	let g:ackprg = 'ag --vimgrep'
+endif
+" }}}
+
+" ctrlp {{{
+let g:ctrlp_working_path_mode = 'ra'
+nnoremap <silent> <D-t> :CtrlP<CR>
+nnoremap <silent> <D-r> :CtrlPMRU<CR>
+let g:ctrlp_custom_ignore = {
+      \ 'dir': '\.git$\|\.hg$\|\.svn$',
+      \ 'file': '\.exe$\|\.so$\|\.dll$\|\.pyc$' }
+
+if executable('ag')
+  let s:ctrlp_fallback = 'ag %s --nocolor -l -g ""'
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+elseif executable('ack-grep')
+  let s:ctrlp_fallback = 'ack-grep %s --nocolor -f'
+elseif executable('ack')
+  let s:ctrlp_fallback = 'ack %s --nocolor -f'
+else
+  let s:ctrlp_fallback = 'find %s -type f'
+endif
+
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others'],
+    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+  \ },
+  \ 'fallback': s:ctrlp_fallback
+\ }
+
+" CtrlP extensions
+let g:ctrlp_extensions = ['funky']
+
+" }}}
+
+" tagbar {{{
+nnoremap <silent> <leader>tt :TagbarToggle<CR>
+"}}}
+
+" multiple cursers {{{
+let g:multi_cursor_next_key='<C-f>'
+"let g:multi_cursor_start_key='<C-f>'
+"}}}
+
+" syntastic: {{{
+"cpp
+let g:syntastic_cpp_compiler_options = "-std=gnu++14"
+let g:syntastic_cpp_check_header     = 1
+let g:syntastic_cpp_checkers         = ["gcc", "cppcheck"]
+"java
+let g:syntastic_java_javac_classpath = '.'
+
+"general
+let g:syntastic_check_on_open        = 1
+let g:syntastic_aggregate_errors     = 1
+let g:syntastic_enable_signs         = 1
+let g:syntastic_python_checkers      = ['python', 'frosted']
+"let g:syntastic_python_checkers      = ['python', 'frosted', 'pylint']
+"}}}
+
+" php {{{
+let php_sql_query           = 1
+let php_htmlInStrings       = 1
+let g:DisableAutoPHPFolding = 0
+let g:PIVAutoClose          = 0
+let g:PHP_autoformatcomment = 0
+
+"}}}
+
+"vim-rails {{{
+let g:rubycomplete_buffer_loading = 1
+"}}}
+
+"neocomplete {{{
+if exists("g:brainpower_use_neo") && g:brainpower_use_neo
+
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_auto_close_preview = 0
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#enable_camel_case = 1
+
+"neocomplete + clang_complete
+"if !exists('g:neocomplete#force_omni_input_patterns')
+"	let g:neocomplete#force_omni_input_patterns = {}
+"endif
+"if !exists('g:neocomplete#sources#omni#input_patterns')
+"	let g:neocomplete#sources#omni#input_patterns = {}
+"endif
+"let g:neocomplete#force_overwrite_completefunc = 1"
+"let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+"let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+"let g:neocomplete#force_omni_input_patterns.objc = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+"let g:neocomplete#force_omni_input_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+"let g:clang_complete_auto = 0
+"let g:clang_auto_select = 0
+"let g:clang_use_library = 1
+"neocomplete + jedi-vim
+"autocmd FileType python setlocal omnifunc=jedi#completions
+"let g:jedi#completions_enabled = 0
+"let g:jedi#auto_vim_configuration = 0
+"let g:neocomplete#force_omni_input_patterns.python = '\%([^. \t]\.\|^\s*@\|^\s*from\s.\+import \|^\s*from \|^\s*import \)\w*'
+"neocomplete + phpcomplete
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+endif
+"}}}
+
+" clang_complete {{{
+"set conceallevel             = 2
+"set concealcursor            = vin
+"let g:clang_snippets         = 1
+"let g:clang_conceal_snippets = 1
+" The single one that works with clang_complete
+"let g:clang_snippets_engine='clang_complete'
+
+" Disable auto popup, use <Tab> to autocomplete
+"let g:clang_complete_auto  = 0
+" Show clang errors in the quickfix window
+"let g:clang_complete_copen = 1
+"let g:clang_close_preview  = 1
+"}}}
+
+" Doxy {{{
+let g:DoxygenToolkit_compactDoc           = "yes"
+let g:DoxygenToolkit_briefTag_pre         = "\\brief "
+let g:DoxygenToolkit_templateParamTag_pre = "\\tparam "
+let g:DoxygenToolkit_paramTag_pre         = "\\param "
+let g:DoxygenToolkit_returnTag            = "\\return "
+let g:DoxygenToolkit_throwTag_pre         = "\\throw "
+let g:DoxygenToolkit_fileTag              = "\\file "
+let g:DoxygenToolkit_authorTag            = "\\author "
+let g:DoxygenToolkit_dateTag              = "\\date "
+let g:DoxygenToolkit_versionTag           = "\\version "
+let g:DoxygenToolkit_blockTag             = "\\name "
+let g:DoxygenToolkit_classTag             = "\\class "
+let g:Doxygentoolkit_authorName           = "brainpower <brainpower at mailbox dot org>"
+let g:Doxygentoolkit_licenseTag           = "GPL"
+"}}}
+
+" Minibuf {{{
+let g:miniBufExplStatusLineText = " "
+let g:miniBufExplAutoStart      = 0
+"}}}
+
+" UltiSnips {{{
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsListSnippets        = "<c-s-q>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-j>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+" }}}
+
+"jedi {{{
+"let g:jedi#show_call_signatures = "1"
+let g:jedi#popup_select_first    = "0"
+let g:jedi#use_tabs_not_buffers  = "0"
+let g:jedi#completions_enabled   = "0"
+"}}}
+
+"eclim {{{
+
+" YCM vs. Eclim
+let g:EclimCompletionMethod = 'omnifunc'
+
+"}}}
+
+"YCM {{{
+"let g:ycm_python_binary_path = '/usr/bin/python2'
+let g:ycm_server_python_interpreter = '/usr/bin/python'
+let g:ycm_show_diagnostics_ui                      = 0 " got syntastic for that
+let g:ycm_allow_changing_updatetime                = 0
+let g:ycm_collect_identifiers_from_tags_files      = 1 " also consider tag files
+let g:ycm_seed_identifiers_with_syntax             = 1 " also consider syntax keywords
+let g:ycm_add_preview_to_completeopt               = 1 " open preview with declaration
+let g:ycm_autoclose_preview_window_after_insertion = 1 " close it when done
+let g:ycm_confirm_extra_conf                       = 0 " TODO: reconsider this
+let g:ycm_key_list_stop_completion = ['<C-y>', '<Enter>']
+
+" some default configurations
+autocmd Filetype cpp let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.cpp.py'
+autocmd Filetype c let g:ycm_global_ycm_extra_conf   = '~/.vim/ycm_extra_conf.c.py'
+
+set completeopt+=longest " put longest common text on complete
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+if has('conceal')
+	set conceallevel=2 concealcursor=i
+endif
+"}}}
+
+" undotree {{{
+nnoremap <Leader>u :UndotreeToggle<CR>
+" If undotree is opened, it is likely one wants to interact with it.
+let g:undotree_SetFocusWhenToggle=1
+"}}}
+
+" vim-airline/whitespace {{{
+let g:airline#extensions#whitespace#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_powerline_fonts = 1
+let g:airline_highlighting_cache = 1
+"}}}
+
+" AutoCloseTag {{{
+" Make it so AutoCloseTag works for xml and xhtml files as well
+au FileType xhtml,xml ru ftplugin/html/autoclosetag.vim
+nmap <Leader>ac <Plug>ToggleAutoCloseMappings
+" }}}
+
+" indent guides {{{
+let g:indent_guides_start_level           = 2
+let g:indent_guides_guide_size            = 1
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors           = 0
+"}}}
+
+" tabular {{{
+nmap <Leader>a<space>  :Tabularize multiple_spaces<CR>
+vmap <Leader>a<space>  :Tabularize multiple_spaces<CR>
+nmap <Leader>a&        :Tabularize /&<CR>
+vmap <Leader>a&        :Tabularize /&<CR>
+nmap <Leader>a=        :Tabularize /=<CR>
+vmap <Leader>a=        :Tabularize /=<CR>
+nmap <Leader>a=>       :Tabularize /=><CR>
+vmap <Leader>a=>       :Tabularize /=><CR>
+nmap <Leader>a:        :Tabularize /:<CR>
+vmap <Leader>a:        :Tabularize /:<CR>
+nmap <Leader>a::       :Tabularize /:\zs<CR>
+vmap <Leader>a::       :Tabularize /:\zs<CR>
+nmap <Leader>a,        :Tabularize /,<CR>
+vmap <Leader>a,        :Tabularize /,<CR>
+nmap <Leader>a,,       :Tabularize /,\zs<CR>
+vmap <Leader>a,,       :Tabularize /,\zs<CR>
+nmap <Leader>a<Bar>    :Tabularize /<Bar><CR>
+vmap <Leader>a<Bar>    :Tabularize /<Bar><CR>
+"}}}
+
+" easytags {{{
+set tags=.tags;,./.tags;
+
+" add tags of stdlibs -> may be slow :(
+" autocmd Filetype * exec "set tags+=~/.vim/libtags/std.".&filetype.".tags;"
+"autocmd Filetype cpp set tags+=~/.vim/libtags/std.cpp.tags;
+"autocmd Filetype c set tags+=~/.vim/libtags/std.c.tags;
+
+let g:easytags_dynamic_files   = 1
+let g:easytags_file            = "~/.vim/gtags-$USER"
+let g:easytags_by_filetype     = expand("~/.vim/tags-$USER/")
+let g:easytags_async           = 1
+let g:easytags_resolve_links   = 1
+let g:easytags_updatetime_warn = 0
+let g:easytags_languages       = { 'php': { 'args': [ '--php-kinds=cf', '--languages=+JavaScript' ] } }
+
+autocmd FileType cpp,python,java let g:easytags_include_members = 1
+
+"autocmd Filetype * exec "set tags+=~/.vim/tags-$USER/".&filetype.";"
+"}}}
+
+"}}}
+
+
+""""""""""""
+" Addons   "
+""""""""""""
+" source file containing the code to load vim scripts aka addons
+if filereadable(expand("$HOME/.vim/vimrc.addons"))
+  source $HOME/.vim/vimrc.addons
+endif
+
+"""""""""""""""""""""""
+"  filetype settings  "
+"""""""""""""""""""""""
+" these have to come after my vundle file, as it sets filetype off
+
+" load filetype specific indentation info, if available
+if has("autocmd")
+	filetype indent on
+endif
+
+filetype plugin on
+
+
+""""""""""
+"  sets  "
+""""""""""
+"{{{
+"set termguicolors
+set nobackup                                    " dont create backup files
+if !has('nvim')
+	set viminfo=%,'50,\"100,:100,n~/.cache/vim/info " save registers and more
+endif
+
+set undofile                                    " persistent undo history
+set undodir=~/.cache/vim/undo/                  " save undo history in this dir
+set directory=~/.cache/vim/swp//,.              " save swp files in this dir
+
+set fileformat=unix " default file mode is unix
+set fileformats=unix,dos,mac " detects unix, dos, mac file formats in that order
+
+" enable mouse if available
+if has("mouse")
+	set mouse+=a
+	set mousehide
+	set mousemodel=popup_setpos
+endif
+
+set hidden      " hide buffers when abandoned
+set history=50  " keep 50 commands in history
+set ruler       " always show cursor position"
+set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+set showcmd     " show (partial) command in status line
+set showmatch   " show matching brackets
+set pastetoggle=<f11>
+set backspace=indent,eol,start
+
+set laststatus=2 " always have a status line
+set winminheight=0
+
+" indent and tab width
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+set noexpandtab    " dont replace tabs with spaces
+set textwidth=0    " dont wrap lines by default
+set smarttab       " smart tab handling for indenting
+set autoindent     " atomatic indent
+set copyindent     " copy the previous indentation on autoindenting
+set cindent        " smart indenting for c-like code
+
+set formatoptions=cqrt " autorwrap, continue comments
+set shortmess=at
+set whichwrap=b,s,h,l,<,>,[,] " Backspace and cursor keys wrap too
+set comments=b:#,:%,fb:-,n:>,n:)
+set listchars=eol:$,precedes:«,extends:»,tab:»·,trail:·
+
+" highlight search term and incremental search
+set hlsearch incsearch
+set ignorecase smartcase
+
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+endif
+
+" line numbers
+set number
+set foldenable
+set foldmethod=marker " fold where there are markers
+
+set nodigraph      " no inputting of non-printable ASCI codes (C-V)
+set noerrorbells   " dont beep on error messages
+
+" Suffixes that get lower priority when doing tab completion for filenames.
+" These are files we are not likely to want to edit or read.
+set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+
+" ignore these in autocomplete
+set wildignore+=.git
+set wildignore+=.hg
+set wildignore+=.svn
+set wildignore+=*.o,*.pyc,*.obj,*.so,*.dll,*.exe
+set wildignore+=*.jpg,*.png,*.gif,*.ico
+set wildignore+=*.wav,*.mp3,*.flac,*.ogg
+
+
+"set statusline=%f\ %m%r%y%=%{SyntasticStatuslineFlag()}\ %l,%c%V\ %-6.(%P%)
+"set statusline=%<%f\ %h%m%r%y%{&ff=='unix'?'':'['.&ff.']'}%{&fenc==\"\"?(&enc=='utf-8'?'':'['.&enc.']'):(&fenc=='utf-8'?'':'['.&fenc.']')}%=%{SyntasticStatuslineFlag()}\ %-14.(%l,%c%V%)\ %P
+
+
+set wildmenu    " command-line completion operates in an enhanced mode
+set wildmode=list:longest,full
+
+set switchbuf=useopen,usetab
+
+set scrolljump=5
+set scrolloff=3
+
+" Stop certain movements from always going to the first character of a line.
+set nostartofline
+
+" Instead of failing a command because of unsaved changes, instead raise a
+" dialogue asking if you wish to save changed files.
+set confirm
+
+" Use visual bell instead of beeping when doing something wrong
+"set visualbell
+
+" Set the command window height to 2 lines
+"set cmdheight=2
+
+" Quickly time out on keycodes, but never time out on mappings
+set notimeout ttimeout ttimeoutlen=200
+
+autocmd FileType text,markdown,gitcommit set nocindent
+au BufReadCmd *.epub call zip#Browse( expand( "<amatch>" ) )
+" Instead of reverting the cursor to the last position in the buffer, we
+" set it to the first line when editing a git commit message
+au FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+""" set the screen hardstatus to vim(filename.ext)
+if ((&term =~ '^screen') && ($VIM_PLEASE_SET_TITLE =~ '^yes$') || has('gui_running'))
+  set t_ts=k
+  set t_fs=\
+  set title
+  autocmd BufEnter * let &titlestring = "vim(" . expand("%:t") . ")"
+  let &titleold = fnamemodify(&shell, ":t")
+endif
+
+if has('terminal')
+	let g:termdebug_wide=1
+endif
+
+"}}}
+
+
+"""""""""""""""
+"  functions  "
+"""""""""""""""
+"{{{
+function! ToggleMouse()
+  if &mouse == 'a'
+    set mouse=
+    echo "Mouse usage disabled"
+  else
+    set mouse=a
+    echo "Mouse usage enabled"
+  endif
+endfunction
+
+let g:quickfix_is_open = 0
+function! QuickfixToggle()
+    if g:quickfix_is_open
+        cclose
+        let g:quickfix_is_open = 0
+        execute g:quickfix_return_to_window . "wincmd w"
+    else
+        let g:quickfix_return_to_window = winnr()
+        copen
+        let g:quickfix_is_open = 1
+    endif
+endfunction
+"}}}
+
+
+""""""""""""""
+"  mappings  "
+""""""""""""""
+"{{{
+
+nnoremap <leader>sc :let @/ = ""<cr>
+
+nnoremap <leader>q :call QuickfixToggle()<cr>
+noremap <Leader>n :NERDTreeToggle<cr>
+
+
+nnoremap <F1> :call QuickfixToggle()<cr>
+inoremap <F1> :call QuickfixToggle()<cr>
+
+noremap <F2> :NERDTreeToggle<cr>
+inoremap <F2> :NERDTreeToggle<cr>
+
+inoremap <F3> <C-R>=strftime("%a, %d %b %Y %H:%M:%S %z")<cr>
+inoremap <F4> <C-R>=strftime("%d. %b %Y %H:%M:%S")<cr>
+inoremap <F5> <C-R>=strftime("%F")<cr>
+
+" <2-LeftMouse>     Open fold, or select word or % match.
+nnoremap <expr> <2-LeftMouse> foldclosed(line('.')) == -1 ? "\<2-LeftMouse>" : 'zo'
+
+" Eclim java shortcuts
+autocmd Filetype java nnoremap <silent> <buffer> <leader>i :JavaImport<cr>
+autocmd Filetype java nnoremap <silent> <buffer> <leader>j :JavaImpl<cr>
+autocmd Filetype java nnoremap <silent> <buffer> <leader>d :JavaDocSearch -x declarations<cr>
+" close menu when pressing enter instead of inserting a <cr>
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+
+" smart home key
+"noremap <expr> <silent> <Home> SmartHome()
+"imap <silent> <Home> <C-O><Home>
+ map <silent> <Home> :SmartHomeKey<CR>
+imap <silent> <Home> <C-O>:SmartHomeKey<CR>
+" duplicate line or selection
+ noremap <C-D> "1yyp
+vnoremap <C-D> "1y`>p
+inoremap <C-D> <Esc>"1yypi
+" make ctrl-S save
+ noremap <silent> <C-S> :w<CR>
+vnoremap <silent> <C-S> <C-C>:w<CR>
+inoremap <silent> <C-S> <C-O>:w<CR>
+" taglist toggle
+"nnoremap <C-l> :TlistToggle<CR>
+"" noremap <silent> <F8> :TlistToggle<CR>
+" mouse toggle
+ noremap <f12> :call ToggleMouse()<cr>
+vnoremap <f12> :call ToggleMouse()<cr>
+inoremap <f12> :call ToggleMouse()<cr>
+
+" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
+" which is the default
+noremap Y y$
+
+" Find merge conflict markers
+noremap <leader>fc /\v^[<\|=>]{7}( .*\|$)<CR>
+
+" Allow using the repeat operator with a visual selection (!)
+" http://stackoverflow.com/a/8064607/127816
+vnoremap . :normal .<CR>
+
+" Reselect visual block after indent
+xnoremap < <gv
+xnoremap > >gv
+
+
+" expand the path to current file in any command
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+
+" Adjust viewports to the same size
+noremap <Leader>= <C-w>=
+
+" Code folding options
+nmap <leader>f0 :set foldlevel=0<CR>
+nmap <leader>f1 :set foldlevel=1<CR>
+nmap <leader>f2 :set foldlevel=2<CR>
+nmap <leader>f3 :set foldlevel=3<CR>
+nmap <leader>f4 :set foldlevel=4<CR>
+nmap <leader>f5 :set foldlevel=5<CR>
+nmap <leader>f6 :set foldlevel=6<CR>
+nmap <leader>f7 :set foldlevel=7<CR>
+nmap <leader>f8 :set foldlevel=8<CR>
+nmap <leader>f9 :set foldlevel=9<CR>
+
+
+
+"<s> build tags of your own project with Ctrl-F12,</s> use easytags instead
+"map <C-F12> :!ctags -R --sort=yes --c++-kinds=+pl --fields=+iaS --extra=+q .<CR>
+
+" lh-cpp
+"imap <C-j>      <Plug>MarkersJumpF
+" map <C-j>      <Plug>MarkersJumpF
+"imap <C-k>      <Plug>MarkersJumpB
+" map <C-k>      <Plug>MarkersJumpB
+"imap <C-<>      <Plug>MarkersMark
+"nmap <C-<>      <Plug>MarkersMark
+"vmap <C-<>      <Plug>MarkersMark
+
+" spelling
+noremap \sge :setlocal spell spelllang=de_de<cr>
+noremap \sen :setlocal spell spelllang=en_us<cr>
+
+" :w -> "don't wanna" -> sudo :w ;)
+cnoremap w!! w !sudo tee % >/dev/null
+
+noremap <c-n> :MBEbn<cr>
+noremap <c-b> :MBEbp<cr>
+inoremap <c-n> <C-O>:MBEbn<cr>
+inoremap <c-b> <C-O>:MBEbp<cr>
+
+ noremap <c-y> <c-e>
+ noremap <s-y> <c-y>
+
+" with F7 copy all current buffer to clipboard, or a selection.
+" with shift-F7, paste all clipboard contents
+" see: http://www.vim.org/tips/tip.php?tip_id=964
+map   <F7>  :w !xclip<CR><CR>
+vmap  <F7>  "*y
+map <S-F7>  :r!xclip -o<CR>
+
+
+" remove/delete trailing whitespace:
+nmap ;tr :%s/\s\+$//
+vmap ;tr  :s/\s\+$//
+
+" execute the command in the current line (minus the first word, which
+" is intended to be a shell prompt) and insert the output in the buffer
+"map ,e ^wy$:r!"
+
+" update timestamp
+"iab YDATE <C-R>=strftime("%a %b %d %T %Z %Y")<CR>
+"map ,L  1G/Latest change:\s*/e+1<CR>CYDATE<ESC>
+
+"}}}
+
+""""""""""""""
+"  autocmds  "
+""""""""""""""
+"{{{
+if has("autocmd")
+
+" When editing a file, always jump to the last cursor position
+autocmd BufReadPost * if line("'\"") && line("'\"") <= line("$") | exe "normal `\"" | endif
+
+" nerd tree autclose if nerdtree last window
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+"autocmd VimEnter * NERDTree
+"autocmd VimEnter * wincmd p
+
+" Resize splits when window is resized
+autocmd VimResized * exe "normal! \<c-w>="
+
+endif
+"}}}
+
+"""""""""""""""""""
+"  abbreviations  "
+"""""""""""""""""""
+"{{{
+"iab RDATE <C-R>=strftime("%a, %d %b %Y %H:%M:%S %z")<cr>
+"iab DATE <C-R>=strftime("%d. %b %Y %H:%M:%S")<cr>
+
+cabbrev nt tabnext
+cabbrev Nt tabprev
+cabbrev Q q!
+cabbrev W w!
+cabbrev WQ wq!
+"}}}
+
+""""""""""""""
+"  commands  "
+""""""""""""""
+"{{{
+command -nargs=1 InvSearch execute 'normal! /^\(\(.*' . "<args>" . '.*\)\@!.\)*$' . "\<CR>"
+"}}}
+
+"{{{
+"set omnifunc if non-existent
+"if has("autocmd") && exists("+omnifunc")
+  "autocmd Filetype *
+        "\if &omnifunc == "" |
+        "\setlocal omnifunc=syntaxcomplete#Complete |
+        "\endif
+"endif
+"}}}
+
+
+""""""""""""""""""""""""""""""""""
+"  setup for visual environment  "
+""""""""""""""""""""""""""""""""""
+"{{{
+if $COLORTERM =~ '^truecolor'
+	set termguicolors
+	"set t_Co=16777216
+endif
+" if $TERM =~ '^xterm'
+"         set t_Co=256
+" elseif $TERM =~ '^screen'
+"         set t_Co=256            " just guessing
+" elseif $TERM =~ '^rxvt'
+"         set t_Co=88
+" elseif $TERM =~ '^linux'
+"         set t_Co=8
+" else
+"         set t_Co=16
+" endif
+"}}}
+
+" create some dirs if non-existent
+"{{{
+" create undodir directory if possible and does not exist yet
+function! Xmkdir(targetdir)
+	if isdirectory(a:targetdir) != 1 && getftype(a:targetdir) == "" && exists("*mkdir")
+	  call mkdir(a:targetdir, "p", 0700)
+	endif
+endfun
+call Xmkdir($HOME . "/.cache/vim/undo")
+call Xmkdir($HOME . "/.cache/vim/swp")
+"}}}
+
+""""""""""""""""""""
+"  sourcing files  "
+""""""""""""""""""""
+"{{{
+" Interface to Mercurial Version Control
+if filereadable( "/usr/share/doc/mercurial/examples/vim/hg-menu.vim" )
+  source /usr/share/doc/mercurial/examples/vim/hg-menu.vim
+endif
+
+" source user-specific local configuration file
+if filereadable(expand("$HOME/.vim/vimrc.local"))
+  source $HOME/.vim/vimrc.local
+endif
+"}}}
+
+" vim: foldmethod=marker foldlevel=0:

@@ -1,0 +1,66 @@
+# Write your default config options here!
+
+##
+# Player behavior
+###
+force-window
+save-position-on-quit
+write-filename-in-watch-later-config
+screenshot-format=png  # default would be jpg
+
+
+##
+# Video decoders
+###
+
+# prefer xvid decoder over odivx
+vd=xvid,
+
+
+##
+# hardware decoding
+###
+# if you've got an intel GPU, use hwdec=vaapi instead!
+hwdec=vdpau
+hwdec-codecs=all
+
+##
+# Video renerer
+###
+
+# mpv recomends vo=opengl (default) or vo=gpu (>= 0.28, default)
+#vo=vdpau,
+
+
+
+##
+#	Subs
+###
+
+# external subs and audio track detection
+sub-auto=fuzzy
+audio-file-auto=fuzzy
+sub-file-paths=sub:Sub:subs:Subs:SUB:SUBS:subtitle:Subtitle:subtitles:Subtitles
+audio-file-paths=AC3:ac3:Audio:audio
+
+
+##
+# Video scaling
+###
+
+# mpv recomends these settings,
+# if the computer can manage it (desktops usually do, most laptops do)
+profile=opengl-hq
+#profile=gpu-hq # mpv >= 0.28
+scale=ewa_lanczossharp
+cscale=ewa_lanczossharp
+video-sync=display-resample
+interpolation
+tscale=oversample
+
+##
+# bigger cache
+###
+cache=123400
+demuxer-readahead-secs=20
+demuxer-mkv-subtitle-preroll

@@ -1,0 +1,119 @@
+**************************************************
+* Keymappings (see vim defaults with :h index)   *
+**************************************************
+columns: <keystrokes> <modes> <description>
+
+,q           n  toggle quickfix
+,n           n  toggle NerdTree
+,tt          n  toggle Tagbar
+,u           n  toggle UndoTree
+,ig          n  toggle Indent Guides
+
+,P           n  preview html, md, etc (vim-preview) TODO
+
+,sc          n  clear search highlight
+,fc          n  find merge conflict markers (git)
+,=           n  adjust windows to same size
+,f[0-9]      n  set foldlevel from 0 to 9
+,a<space>    n   tabularize multiple spaces
+,a<sign>     n  tabularize '&', '=', '=>', ':', '::', ',', ',,', '|'
+
+
+,cc        v n  comment out current line or selection
+,cn        v n  same as ,cc but nested
+,c         v    toggle comment on selected lines
+,cm        v n  comment lines with only one kind of delimiter
+,ci        v n  invert comments
+,cs        v n  comment out lines sexily
+,cy        v n  sames as ,cc, but lines are yanked first
+,c$          n  comment from cursor to end of line
+,cA          n  append a comment to current line
+,ca          n  switch to alternative delimiters
+,cu        v n  uncomment lines
+gcc          n  comment a line
+gc         v    comment selection
+
+cs"'         n  change surrounding quotes from " to '
+cst'         n  change surrounding tags (like <p>) to '
+cs]{         n  change surrounding brackets to braces
+ysiw]        n  surround inner word with brackets
+yss<sign>    n  surround complete line
+ds<sign>     n  delete surrounding ", ' or tags (sign=t)
+S<sign>    v    surround selection with quotes, brackets or a tag
+
+# TODO: DBirgendwas, IHN, <D-r>
+
+,ac          n  xml:  Toggle AutoClose Mappings
+,i           n  java: import symbol
+,j           n  java: show methods that can be overridden/implemented
+,d           n  java: search in javadoc
+
+,g           n  python: goto assignments
+,d           n  python: goto definition
+,r           n  python: rename
+,n           n  python: show usages of name
+
+[c           n  jump to previous hunk (signify)
+]c           n  jump to next hunk (signify)
+
+<C-e>        n  toggle NerdTree
+<C-p>        n  toggle CtrlP
+<C-f>        n  Start Multiple cursors TODO
+<C-n>       in  switch to next buffer
+<C-b>       in  switch to previous buffer
+<S-y>        n  scroll upwards
+<C-y>        n  scroll downwards
+<C-d>      vin  duplicate line or visual selection
+<C-s>      vin  save file with :w
+
+<S-k>      v n  look up man page for current word or selection
+
+<S-Tab>     i   jump over closing delimiter
+<C-g>g      i   jump over all closing delimiters
+
+<C-g>u      i   set a undo mark
+<C-r><reg>  i   insert content of register
+<C-y>       i   insert char above cursor
+
+\sge         n  set spelling language to german
+\sen         n  set spelling language to english
+
+
+<F2>        in  Toggle NerdTree
+<F3>        i   insert time
+<F4>        i   insert time
+<F7>       vin  copy all buffer (reqires xclip) or selection to clipboard
+<S-F7>     vin  paste clipboard content (requires xclip)
+<F12>      vin  toggle mouse
+
+*****************************************
+* text objects ( like w in ciw )        *
+*****************************************
+
+a     argument of a function
+
+*****************************************
+* common commands                       *
+*****************************************
+
+:w!!         "force" save with sudo
+:Q           :q!
+:W           :w!
+:WQ          :wq!
+
+:InvSearch   inverted search
+:PluginInstall  install missing Addons
+:PluginUpdate   update installed Addons
+
+
+********
+* TODO *
+********
+
+TODO commands?
+
+TODO: https://github.com/tpope/vim-projectionist
+TODO: https://github.com/arnaud-lb/vim-php-namespace -> mappings needed, otherwise useless
+TODO: https://github.com/Lokaltog/vim-easymotion
+
+
