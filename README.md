@@ -20,7 +20,7 @@ Files in mpv/scripts/ are an exception to this.
 
 ## A few words about the zshrc:
 
-This .zshrc heavily depends on the [zshrc from the grml system] (http://grml.org/zsh),
+This .zshrc heavily depends on the [zshrc from the grml system](http://grml.org/zsh),
 it probably won't work at all without it.
 
 ### Locations and files
