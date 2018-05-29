@@ -9,6 +9,7 @@
 	s = status
 	wu = log --stat origin..@{0}
 	wup = log -p origin..@{0}
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(white)%aD%C(reset) %C(yellow)(%ar)%C(reset) \t %C(cyan)%s%C(reset) %C(dim green)- %an%C(reset) \t %C(bold yellow)%d%C(reset)' --all
 [color]
 	branch = auto
 	diff = auto
